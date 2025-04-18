@@ -1,0 +1,385 @@
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background-color: #f1f1f1;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    form, .no-print {
+        display: flex;
+        flex-wrap: wrap;
+        /* justify-content: center; */
+        gap: 10px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        max-width: 900px;
+        margin: 0 auto 20px auto;
+    }
+
+    input[type="number"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        width: 120px;
+        font-size: 14px;
+    }
+
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button:hover {
+        background-color: #218838;
+    }
+
+    #printArea {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 1000px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 13.5px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f0f0f0;
+        font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+        background-color: #fcfcfc;
+    }
+
+    .edit-btn {
+        background-color: #ffc107;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .edit-btn:hover {
+        background-color: #e0a800;
+    }
+
+    #invoiceDate {
+        float: right;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+
+        td:last-child,
+        th:last-child {
+            display: none !important;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        table {
+            font-size: 12px;
+        }
+
+        #printArea {
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+</style>
+
+
+
+
+<h1 class="no-print">EntryPoint:</h1>
+<form id="entryForm" class="no-print">
+    <input type="number" id="bags" placeholder="bags" required>
+    <input type="number" id="oil" step="0.01" min="0" placeholder="oil%" required>
+    <input type="number" id="rate" step="0.01" placeholder="rate" required>
+    
+    <button type="submit">Submit</button>
+</form>
+<!-- Keep this OUTSIDE the form -->
+<div class="no-print">
+    <label>Majduri: <input type="number" id="majdur" step="0.01" placeholder="MAJDURI"> <br><br>
+        <!-- MANDI: <input type="number" id="mandi" placeholder="3.75(MANDI + DAMI + KKF)" readonly></label><br><br> -->
+    <button id="bt" onclick="printTable()">Print as PDF</button>
+</div>
+
+<div id="printArea">
+
+    <div style="text-align: center; font-family: serif;">
+        <h2><strong>ROSHANLAL KEDARNATH</strong></h2>
+        <p>B-21 NEW MANDI YARD MANDAWAR</p>
+        <p><strong>Party: C P AGRO INDUSTRIES ROOPBAS</strong> | Date: <span id="invoiceDate"></span></p>
+    </div>
+
+    <table border="1" id="dataTable">
+        <!-- same table rows as you have now -->
+        <tr>
+            <th>S. No.</th>
+            <th>Bags</th>
+            <th>Rate</th>
+            <th>Oil%</th>
+            <th>Condition</th>
+            <th>Weight</th>
+            <th>Amount</th>
+            <th class="no-print">Action</th>
+        </tr>
+        <tr id="totalsRow">
+            <td><strong>Total</strong></td>
+            <td id="totalBags">0</td>
+            <td id="weightedRate">0</td>
+            <td id="weightedOil">0</td>
+            <td id="weightedCondition">0</td>
+            <td id="totalWeight">0</td>
+            <td id="totalAmount">0</td>
+            <td class="no-print"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><strong>MANDI + DAMI + KKF</strong></td>
+            <td id="mandiAmount">0</td>
+            <td class="no-print"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><strong>MAJDURI</strong></td>
+            <td id="majdurAmount">0</td>
+            <td class="no-print"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><strong>MUDDAT @ 0.75%</strong></td>
+            <td id="muddatAmount">0</td>
+            <td class="no-print"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><strong>TOTAL</strong></td>
+            <td id="Total">0</td>
+            <td class="no-print"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><strong>GST @ 5%</strong></td>
+            <td id="gstAmount">0</td>
+            <td class="no-print"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><strong>GRAND TOTAL</strong></td>
+            <td id="grandTotal">0</td>
+            <td class="no-print"></td>
+        </tr>
+    </table>
+    <div style="text-align: right; margin-top: 60px;">
+        <p><strong>For Roshanlal Kedarnath</strong></p>
+        <br><br><br>
+        <h3 style="margin: 0;">Authorised sign.</h3>
+    </div>
+    
+
+</div>
+
+<script>
+    document.getElementById("invoiceDate").textContent = new Date().toLocaleDateString();
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let editRowIndex = null;
+
+    $(document).ready(function () {
+        $('#entryForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const bags = parseInt($('#bags').val());
+            const oil = parseFloat($('#oil').val());
+            const rate = parseFloat($('#rate').val());
+
+            const condition = ((rate / oil) * 42).toFixed(2);
+            const weight = (bags * 0.5).toFixed(2);
+            const amount = (weight * rate).toFixed(2);
+
+            if (editRowIndex !== null) {
+                const row = $('#dataTable tr').eq(editRowIndex);
+                row.find('td').eq(1).text(bags);
+                row.find('td').eq(2).text(rate);
+                row.find('td').eq(3).text(oil);
+                row.find('td').eq(4).text(condition);
+                row.find('td').eq(5).text(weight);
+                row.find('td').eq(6).text(amount);
+                editRowIndex = null;
+            } else {
+                const rowCount = $('#dataTable tr').filter(function () {
+                    return !$(this).attr('id') && $(this).find('td').length > 0;
+                }).length - 5;
+
+                const newRow = `
+                    <tr>
+                        <td>${rowCount}</td>
+                        <td>${bags}</td>
+                        <td>${rate}</td>
+                        <td>${oil}</td>
+                        <td>${condition}</td>
+                        <td>${weight}</td>
+                        <td>${amount}</td>
+                        <td class="no-print"><button class="edit-btn">Edit</button></td>
+                    </tr>
+                `;
+                $('#totalsRow').before(newRow);
+            }
+
+            updateTotals();
+            this.reset();
+        });
+
+        $('#dataTable').on('click', '.edit-btn', function () {
+            const row = $(this).closest('tr');
+            editRowIndex = row.index();
+            const cells = row.find('td');
+            $('#bags').val(cells.eq(1).text());
+            $('#rate').val(cells.eq(2).text());
+            $('#oil').val(cells.eq(3).text());
+        });
+        
+        $('#majdur').on('change', function() {
+            updateTotals();
+        });
+    });
+
+    function updateTotals() {
+        let totalBags = 0;
+        let totalWeight = 0;
+        let totalAmount = 0;
+        let weightedRateSum = 0;
+        let weightedOilSum = 0;
+        let weightedConditionSum = 0;
+
+        $('#dataTable tr').each(function (index) {
+            if (index === 0 || $(this).attr('id') === 'totalsRow') return;
+
+            const cells = $(this).find('td');
+            if (cells.length < 7) return;
+
+            const bags = parseFloat(cells.eq(1).text()) || 0;
+            const rate = parseFloat(cells.eq(2).text()) || 0;
+            const oil = parseFloat(cells.eq(3).text()) || 0;
+            const condition = parseFloat(cells.eq(4).text()) || 0;
+            const weight = parseFloat(cells.eq(5).text()) || 0;
+            const amount = parseFloat(cells.eq(6).text()) || 0;
+
+            totalBags += bags;
+            totalWeight += weight;
+            totalAmount += amount;
+            weightedRateSum += rate * bags;
+            weightedOilSum += oil * bags;
+            weightedConditionSum += condition * bags;
+        });
+
+        const mandiPercent = 3.75;
+        const majdur = parseFloat($('#majdur').val()) || 0;
+        const mandiAmount = (totalAmount * (mandiPercent / 100));
+        const muddat = (totalAmount + mandiAmount + majdur) * 0.0075;
+        const Total = totalAmount + mandiAmount + majdur + muddat;
+        const gst = (totalAmount + mandiAmount + majdur + muddat) * 0.05;
+        const grandTotal = totalAmount + mandiAmount + majdur + muddat + gst;
+
+        $('#totalBags').text(totalBags.toFixed(2));
+        $('#totalWeight').text(totalWeight.toFixed(2));
+        $('#totalAmount').text(totalAmount.toFixed(2));
+        $('#weightedRate').text((weightedRateSum / totalBags).toFixed(2));
+        $('#weightedOil').text((weightedOilSum / totalBags).toFixed(2));
+        $('#weightedCondition').text((weightedConditionSum / totalBags).toFixed(2));
+
+        $('#mandiAmount').text(mandiAmount.toFixed(2));
+        $('#majdurAmount').text(majdur.toFixed(2));
+        $('#muddatAmount').text(muddat.toFixed(2));
+        $('#Total').text(Total.toFixed(2));
+        $('#gstAmount').text(gst.toFixed(2));
+        $('#grandTotal').text(grandTotal.toFixed(2));
+        
+        // Update the readonly mandi field
+        $('#mandi').val(mandiAmount.toFixed(2));
+    }
+
+    function printTable() {
+        if (!$('#majdur').val()) {
+            alert("Please enter Majduri before printing.");
+            return;
+        }
+        
+        // Force update all totals before printing
+        updateTotals();
+        
+        // Get the print area HTML
+        const printContent = document.getElementById('printArea').innerHTML;
+        
+        // Create a new window for printing
+        const printWindow = window.open('', '_blank');
+        
+        // Write the HTML content
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title></title>
+                <style>
+                    body { font-family: Arial, sans-serif; font-size: 14px; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+                    .no-print { display: none; }
+                    td:last-child, th:last-child { display: none; }
+                </style>
+            </head>
+            <body>
+                ${printContent}
+                <script>
+                    window.onload = function() {
+                        setTimeout(function() {
+                            window.print();
+                            window.close();
+                        }, 200);
+                    };
+                <\/script>
+            </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+    }
+</script>
