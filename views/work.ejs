@@ -7,7 +7,8 @@
         padding: 20px;
     }
 
-    h1, h2 {
+    h1,
+    h2 {
         text-align: center;
         margin-bottom: 10px;
     }
@@ -17,7 +18,8 @@
         font-weight: 600;
     }
 
-    form, .no-print {
+    form,
+    .no-print {
         display: flex;
         flex-wrap: wrap;
         /* justify-content: center; */
@@ -25,7 +27,7 @@
         padding: 20px;
         background-color: #fff;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
         max-width: 900px;
         margin: 0 auto 20px auto;
     }
@@ -58,7 +60,7 @@
         border-radius: 10px;
         max-width: 1000px;
         margin: auto;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     }
 
     table {
@@ -68,7 +70,8 @@
         font-size: 13.5px;
     }
 
-    th, td {
+    th,
+    td {
         border: 1px solid #ddd;
         padding: 10px;
         text-align: center;
@@ -128,30 +131,29 @@
     }
 </style>
 
-
-
-
-<h1 class="no-print">EntryPoint:</h1>
+<h1 class="no-print">Roshanlal Kedarnath Mandawar</h1>
 <form id="entryForm" class="no-print">
-    <input type="number" id="bags" placeholder="bags" required>
-    <input type="number" id="oil" step="0.01" min="0" placeholder="oil%" required>
-    <input type="number" id="rate" step="0.01" placeholder="rate" required>
-    
+    <input type="number" id="bags" placeholder="Bags" required>
+    <input type="number" id="oil" step="0.01" min="0" placeholder="Oil%" required>
+    <input type="number" id="condition" step="0.01" placeholder="Condition" required>
     <button type="submit">Submit</button>
 </form>
 <!-- Keep this OUTSIDE the form -->
 <div class="no-print">
-    <label>Majduri: <input type="number" id="majdur" step="0.01" placeholder="MAJDURI"> <br><br>
+    <label>Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
+        Date: <input type="date" id="dateInput" placeholder="Enter Date" class="work">
         <!-- MANDI: <input type="number" id="mandi" placeholder="3.75(MANDI + DAMI + KKF)" readonly></label><br><br> -->
-    <button id="bt" onclick="printTable()">Print as PDF</button>
+        <button id="bt" onclick="printTable()">Print</button>
 </div>
-
+<!--  -->
 <div id="printArea">
 
     <div style="text-align: center; font-family: serif;">
         <h2><strong>ROSHANLAL KEDARNATH</strong></h2>
         <p>B-21 NEW MANDI YARD MANDAWAR</p>
-        <p><strong>Party: C P AGRO INDUSTRIES ROOPBAS</strong> | Date: <span id="invoiceDate"></span></p>
+        <p><strong>Party: C P AGRO INDUSTRIES ROOPBAS</strong> |Date: <span id="invoiceDate"></span></p>
+
+        <!-- <span id="invoiceDate"></span></p> -->
     </div>
 
     <table border="1" id="dataTable">
@@ -209,15 +211,14 @@
     </table>
     <div style="text-align: right; margin-top: 60px;">
         <p><strong>For Roshanlal Kedarnath</strong></p>
-        <br><br><br>
+        <br>
         <h3 style="margin: 0;">Authorised sign.</h3>
     </div>
-    
-
 </div>
 
 <script>
-    document.getElementById("invoiceDate").textContent = new Date().toLocaleDateString();
+    document.getElementById('invoiceDateInput').valueAsDate = new Date();
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -229,9 +230,9 @@
 
             const bags = parseInt($('#bags').val());
             const oil = parseFloat($('#oil').val());
-            const rate = parseFloat($('#rate').val());
+            const condition = parseFloat($('#condition').val());
 
-            const condition = ((rate / oil) * 42).toFixed(2);
+            const rate = ((condition / 42) * oil).toFixed(2);
             const weight = (bags * 0.5).toFixed(2);
             const amount = (weight * rate).toFixed(2);
 
@@ -258,7 +259,11 @@
                         <td>${condition}</td>
                         <td>${weight}</td>
                         <td>${amount}</td>
-                        <td class="no-print"><button class="edit-btn">Edit</button></td>
+                        <td class="no-print">
+    <button class="edit-btn">Edit</button>
+    <button class="delete-btn" style="margin-left: 1px; background-color: red; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
+</td>
+
                     </tr>
                 `;
                 $('#totalsRow').before(newRow);
@@ -272,15 +277,41 @@
             const row = $(this).closest('tr');
             editRowIndex = row.index();
             const cells = row.find('td');
-            $('#bags').val(cells.eq(1).text());
-            $('#rate').val(cells.eq(2).text());
+            $('#condition').val(cells.eq(4).text());
             $('#oil').val(cells.eq(3).text());
+            $('#bags').val(cells.eq(1).text());
+
         });
-        
-        $('#majdur').on('change', function() {
+
+        $('#dataTable').on('click', '.delete-btn', function () {
+            $(this).closest('tr').remove();
+            renumberRows();
+            updateTotals();
+        });
+
+        // $('#dateInput').on('change', function () {
+        //     const selectedDate = new Date(this.value);
+        //     const formattedDate = selectedDate.toLocaleDateString('en-GB'); // Or 'en-US' as per your format
+        //     $('#i').text(formattedDate);
+        // });
+
+
+        $('#majdur').on('change', function () {
             updateTotals();
         });
     });
+
+    function renumberRows() {
+        let serial = 1;
+
+        $('#dataTable tr').each(function () {
+            const $cells = $(this).find('td');
+            if ($cells.length && !$cells.eq(0).text().includes('Total')) {
+                $cells.eq(0).text(serial++);
+            }
+        });
+    }
+
 
     function updateTotals() {
         let totalBags = 0;
@@ -332,7 +363,7 @@
         $('#Total').text(Total.toFixed(2));
         $('#gstAmount').text(gst.toFixed(2));
         $('#grandTotal').text(grandTotal.toFixed(2));
-        
+
         // Update the readonly mandi field
         $('#mandi').val(mandiAmount.toFixed(2));
     }
@@ -342,16 +373,27 @@
             alert("Please enter Majduri before printing.");
             return;
         }
-        
+
+        if (!$('#dateInput').val()){
+            alert("Please enter Date before printing.");
+            return;
+        }
+
+        const selectedDate = $('#dateInput').val();
+        if (selectedDate) {
+            const formattedDate = new Date(selectedDate).toLocaleDateString('en-GB');
+            $('#invoiceDate').text(formattedDate);
+        }
+
         // Force update all totals before printing
         updateTotals();
-        
+
         // Get the print area HTML
         const printContent = document.getElementById('printArea').innerHTML;
-        
+
         // Create a new window for printing
         const printWindow = window.open('', '_blank');
-        
+
         // Write the HTML content
         printWindow.document.write(`
             <!DOCTYPE html>
@@ -363,6 +405,7 @@
                     table { width: 100%; border-collapse: collapse; }
                     th, td { border: 1px solid #000; padding: 8px; text-align: center; }
                     .no-print { display: none; }
+                    .work {display: none;}
                     td:last-child, th:last-child { display: none; }
                 </style>
             </head>
@@ -379,7 +422,7 @@
             </body>
             </html>
         `);
-        
+
         printWindow.document.close();
     }
 </script>
