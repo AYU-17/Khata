@@ -7,6 +7,15 @@
         padding: 20px;
     }
 
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
     h1,
     h2 {
         text-align: center;
@@ -58,7 +67,7 @@
         background: white;
         padding: 30px;
         border-radius: 10px;
-        max-width: 1000px;
+        max-width: 880px;
         margin: auto;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     }
@@ -67,15 +76,16 @@
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
-        font-size: 13.5px;
+        font-size: 13.6px;
     }
 
     th,
     td {
-        border: 1px solid #ddd;
-        padding: 10px;
+        border: 1px solid #000;
+        padding: 4px;
         text-align: center;
     }
+
 
     th {
         background-color: #f0f0f0;
@@ -106,6 +116,27 @@
     }
 
     @media print {
+        body {
+            font-size: 11px;
+            padding: 10px;
+            margin: 0;
+        }
+
+        table {
+            font-size: 11px;
+        }
+
+        td,
+        th {
+            padding: 4px;
+        }
+
+        #printArea {
+            padding: 10px;
+            max-width: 100px;
+            margin: auto;
+        }
+
         .no-print {
             display: none !important;
         }
@@ -113,20 +144,6 @@
         td:last-child,
         th:last-child {
             display: none !important;
-        }
-
-        body {
-            background-color: white;
-        }
-
-        table {
-            font-size: 12px;
-        }
-
-        #printArea {
-            box-shadow: none;
-            margin: 0;
-            padding: 0;
         }
     }
 </style>
@@ -141,8 +158,12 @@
 <!-- Keep this OUTSIDE the form -->
 <div class="no-print">
     <label>Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
+        <!-- <label>Majduri: <input type="number" id="muddat" step="0.01" placeholder="Muddat"> -->
         Date: <input type="date" id="dateInput" placeholder="Enter Date" class="work">
-        <!-- MANDI: <input type="number" id="mandi" placeholder="3.75(MANDI + DAMI + KKF)" readonly></label><br><br> -->
+        Partty: <select id="partySelect">
+            <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
+            <option value="2">SHANTI OIL MILLS</option>
+        </select>
         <button id="bt" onclick="printTable()">Print</button>
 </div>
 <!--  -->
@@ -151,8 +172,7 @@
     <div style="text-align: center; font-family: serif;">
         <h2><strong>ROSHANLAL KEDARNATH</strong></h2>
         <p>B-21 NEW MANDI YARD MANDAWAR</p>
-        <p><strong>Party: C P AGRO INDUSTRIES ROOPBAS</strong> |Date: <span id="invoiceDate"></span></p>
-
+        <p><strong>Party: <span id="partyNameDisplay"></span></strong> | Date: <span id="invoiceDate"></span></p>
         <!-- <span id="invoiceDate"></span></p> -->
     </div>
 
@@ -289,12 +309,6 @@
             updateTotals();
         });
 
-        // $('#dateInput').on('change', function () {
-        //     const selectedDate = new Date(this.value);
-        //     const formattedDate = selectedDate.toLocaleDateString('en-GB'); // Or 'en-US' as per your format
-        //     $('#i').text(formattedDate);
-        // });
-
 
         $('#majdur').on('change', function () {
             updateTotals();
@@ -374,10 +388,14 @@
             return;
         }
 
-        if (!$('#dateInput').val()){
+        if (!$('#dateInput').val()) {
             alert("Please enter Date before printing.");
             return;
         }
+
+        const selectedParty = $('#partySelect option:selected').text();
+        $('#partyNameDisplay').text(selectedParty);
+
 
         const selectedDate = $('#dateInput').val();
         if (selectedDate) {
@@ -400,14 +418,32 @@
             <html>
             <head>
                 <title></title>
+                
+
                 <style>
-                    body { font-family: Arial, sans-serif; font-size: 14px; }
-                    table { width: 100%; border-collapse: collapse; }
-                    th, td { border: 1px solid #000; padding: 8px; text-align: center; }
-                    .no-print { display: none; }
-                    .work {display: none;}
-                    td:last-child, th:last-child { display: none; }
-                </style>
+    body { 
+        font-family: Arial, sans-serif; 
+        font-size: 11px; 
+        margin: 10px;
+    }
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        font-size: 10px; 
+    }
+    th, td { 
+        border: 1px solid #000; 
+        padding: 4px; 
+        text-align: center; 
+    }
+    h2 {
+        font-size: 16px;
+    }
+    .no-print { display: none; }
+    .work {display: none;}
+    td:last-child, th:last-child { display: none; }
+</style>
+
             </head>
             <body>
                 ${printContent}
