@@ -199,7 +199,7 @@
             <td class="no-print"></td>
         </tr>
         <tr>
-            <td colspan="6"><strong>MANDI + DAMI + KKF</strong></td>
+            <td colspan="6"><strong>MANDI + DAMI + KKF @ 3.75%</strong></td>
             <td id="mandiAmount">0</td>
             <td class="no-print"></td>
         </tr>
@@ -237,7 +237,7 @@
 </div>
 
 <script>
-    document.getElementById('invoiceDateInput').valueAsDate = new Date();
+    document.getElementById('dateInput').valueAsDate = new Date();
 
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -316,15 +316,27 @@
     });
 
     function renumberRows() {
-        let serial = 1;
+        let serial = 0;
 
         $('#dataTable tr').each(function () {
-            const $cells = $(this).find('td');
-            if ($cells.length && !$cells.eq(0).text().includes('Total')) {
-                $cells.eq(0).text(serial++);
+            const $row = $(this);
+            // Skip rows with specific IDs or summary content
+            if (
+                $row.attr('id') === 'totalsRow' ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('total') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('mandi') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('majduri') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('muddat') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('gst') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('grand')
+            ) {
+                return;
             }
+
+            $row.find('td').eq(0).text(serial++);
         });
     }
+
 
 
     function updateTotals() {
