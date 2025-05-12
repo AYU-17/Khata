@@ -13,6 +13,11 @@ app.get('/', (req, res) => {
     res.render('work.ejs', { data });
 });
 
+app.get('/work1', (req,res)=>{
+    const data = [];
+    res.render('work1.ejs', { data });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

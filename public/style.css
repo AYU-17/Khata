@@ -1,0 +1,151 @@
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1,
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    save .no-print{
+        background-color: #4CAF50;
+    }
+    .no-print {
+        max-width: 500px;
+        margin: 20px auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        display: block;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #4CAF50;
+        outline: none;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+    }
+
+    button {
+        width: 50%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin-top: 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    button:hover {
+        background-color: #45a049;
+        transform: scale(1.02);
+    }
+
+    #printArea {
+        background: #fff;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    td.no-print {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        flex: 1;
+    }
+
+    .main-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        /* Space between form and table */
+        padding: 20px;
+    }
+
+    .form-container {
+        position: sticky;
+        top: 20px;
+        /* Distance from top */
+        flex: 1;
+        max-width: 300px;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+        /* So it wraps content height */
+    }
+
+    .table-container {
+        flex: 3;
+        /* table takes more space */
+        overflow-x: auto;
+    }
+
+
+
+    /* Print Styling */
+    @media print {
+
+        .no-print,
+        .no-print * {
+            display: none !important;
+        }
+
+        body {
+            background: none;
+        }
+    }

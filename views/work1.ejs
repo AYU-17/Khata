@@ -1,28 +1,34 @@
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/style.css">
+
 <!-- Add these to <head> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <header>
     <h1 class="no-print">Roshanlal Kedarnath Mandawar</h1>
     <select id="pageSelector" class="no-print">
-        <option value="/">Condition</option>
         <option value="/work1">Price</option>
+        <option value="/">Condition</option>
     </select>
 </header>
+
+
 <div class="main-container">
     <div class="form-container">
         <form id="entryForm" class="no-print">
             <input type="number" id="bags" placeholder="Bags" required>
             <input type="number" id="oil" step="0.01" min="0" placeholder="Oil%" required>
-            <input type="number" id="condition" step="0.01" placeholder="Condition" required>
+            <input type="number" id="rate" step="0.01" placeholder="Rate" required>
             <button type="submit">Submit</button>
         </form>
         <!-- Keep this OUTSIDE the form -->
         <div class="no-print">
-            <label>Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
+                Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
                 <!-- <label>Majduri: <input type="number" id="muddat" step="0.01" placeholder="Muddat"> -->
                 Date: <input type="date" id="dateInput" placeholder="Enter Date" class="work">
-                Partty: <select id="partySelect">
+                Partty: 
+                <!-- <input type="text" id="partySelect" placeholder="Enter Party Name" class="work"> -->
+                 <select id="partySelect">
                     <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
                     <option value="2">SHANTI OIL MILLS</option>
                     <option value="3">SANGAM INDUSTRIES</option>
@@ -31,15 +37,17 @@
                 <button id="saveBtn" onclick="saveInvoice()">Save Invoice</button>
         </div>
     </div>
-    <!-- class="save no-print" -->
+
 
     <div class="table-container">
         <div id="printArea">
+
             <div style="text-align: center; font-family: serif;">
                 <h2><strong>ROSHANLAL KEDARNATH</strong></h2>
                 <p>B-21 NEW MANDI YARD MANDAWAR</p>
                 <p><strong>Party: <span id="partyNameDisplay"></span></strong> | Date: <span id="invoiceDate"></span>
                 </p>
+                <!-- <span id="invoiceDate"></span></p> -->
             </div>
 
             <table border="1" id="dataTable">
@@ -65,7 +73,7 @@
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>MANDI + DAMI + KKF @ 3.75%</strong></td>
+                    <td colspan="6"><strong>MANDI + DAMI + KKF</strong></td>
                     <td id="mandiAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
@@ -118,9 +126,9 @@
 
             const bags = parseInt($('#bags').val());
             const oil = parseFloat($('#oil').val());
-            const condition = parseFloat($('#condition').val());
+            const rate = parseFloat($('#rate').val());
 
-            const rate = ((condition / 42) * oil).toFixed(2);
+            const condition = ((rate / oil) * 42).toFixed(2);
             const weight = (bags * 0.5).toFixed(2);
             const amount = (weight * rate).toFixed(2);
 
@@ -165,7 +173,7 @@
             const row = $(this).closest('tr');
             editRowIndex = row.index();
             const cells = row.find('td');
-            $('#condition').val(cells.eq(4).text());
+            $('#rate').val(cells.eq(2).text());
             $('#oil').val(cells.eq(3).text());
             $('#bags').val(cells.eq(1).text());
 
@@ -177,6 +185,10 @@
             updateTotals();
         });
 
+        $('#partySelect').on('input', function () {
+            const partyName = $(this).val().trim();
+            $('#partyNameDisplay').text(partyName || ""); // shows blank if empty
+        });
 
         $('#majdur').on('change', function () {
             updateTotals();
@@ -204,6 +216,7 @@
             $row.find('td').eq(0).text(serial++);
         });
     }
+
 
     function updateTotals() {
         let totalBags = 0;
@@ -262,4 +275,4 @@
 
 </script>
 
-<script src="id.js"></script>
+<script src="/id.js"></script>
