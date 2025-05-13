@@ -158,7 +158,7 @@ function saveInvoice() {
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `Invoice_${partyName}_${invoiceDate}.html`;
+    link.download = `Invoice_${invoiceDate}_${partyName}.html`;
     link.click();
     URL.revokeObjectURL(link.href);
 }

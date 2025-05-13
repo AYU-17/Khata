@@ -5,11 +5,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <header>
-    <h1 class="no-print">Roshanlal Kedarnath Mandawar</h1>
-    <select id="pageSelector" class="no-print">
-        <option value="/work1">Price</option>
-        <option value="/">Condition</option>
-    </select>
+    <h1 class="no-print">Roshanlal Kedarnath Mandawar
+        <select id="pageSelector" class="no-print">
+            <option value="/work1">Price</option>
+            <option value="/">Condition</option>
+        </select>
+    </h1>
 </header>
 
 
@@ -23,18 +24,18 @@
         </form>
         <!-- Keep this OUTSIDE the form -->
         <div class="no-print">
-                Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
-                <!-- <label>Majduri: <input type="number" id="muddat" step="0.01" placeholder="Muddat"> -->
-                Date: <input type="date" id="dateInput" placeholder="Enter Date" class="work">
-                Partty: 
-                <!-- <input type="text" id="partySelect" placeholder="Enter Party Name" class="work"> -->
-                 <select id="partySelect">
-                    <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
-                    <option value="2">SHANTI OIL MILLS</option>
-                    <option value="3">SANGAM INDUSTRIES</option>
-                </select>
-                <button id="bt" onclick="printTable()">Print</button>
-                <button id="saveBtn" onclick="saveInvoice()">Save Invoice</button>
+            Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
+            <!-- <label>Majduri: <input type="number" id="muddat" step="0.01" placeholder="Muddat"> -->
+            Date: <input type="date" id="dateInput" placeholder="Enter Date" class="work">
+            Partty:
+            <!-- <input type="text" id="partySelect" placeholder="Enter Party Name" class="work"> -->
+            <select id="partySelect">
+                <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
+                <option value="2">SHANTI OIL MILLS</option>
+                <option value="3">SANGAM INDUSTRIES</option>
+            </select>
+            <button id="bt" onclick="printTable()">Print</button><br><br>
+            <button id="saveBtn" onclick="saveInvoice()">Save Invoice</button>
         </div>
     </div>
 

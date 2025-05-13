@@ -3,11 +3,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <header>
-    <h1 class="no-print">Roshanlal Kedarnath Mandawar</h1>
-    <select id="pageSelector" class="no-print">
-        <option value="/">Condition</option>
-        <option value="/work1">Price</option>
-    </select>
+    <h1 class="no-print">Roshanlal Kedarnath Mandawar
+        <select id="pageSelector" class="no-print">
+            <option value="/">Condition</option>
+            <option value="/work1">Price</option>
+        </select>
+    </h1>
 </header>
 <div class="main-container">
     <div class="form-container">
@@ -15,7 +16,7 @@
             <input type="number" id="bags" placeholder="Bags" required>
             <input type="number" id="oil" step="0.01" min="0" placeholder="Oil%" required>
             <input type="number" id="condition" step="0.01" placeholder="Condition" required>
-            <button type="submit">Submit</button>
+            <button type="submit" class="btt">Submit</button>
         </form>
         <!-- Keep this OUTSIDE the form -->
         <div class="no-print">
@@ -27,8 +28,8 @@
                     <option value="2">SHANTI OIL MILLS</option>
                     <option value="3">SANGAM INDUSTRIES</option>
                 </select>
-                <button id="bt" onclick="printTable()">Print</button>
-                <button id="saveBtn" onclick="saveInvoice()">Save Invoice</button>
+                <button id="bt btt" onclick="printTable()">Print</button><br><br>
+                <button id="saveBtn btt" onclick="saveInvoice()">Save Invoice</button>
         </div>
     </div>
     <!-- class="save no-print" -->
