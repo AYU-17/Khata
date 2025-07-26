@@ -9,6 +9,12 @@ function printTable() {
         return;
     }
 
+    if (!$('#partySelect').val()) {
+        alert("Please enter party name before printing.");
+        return;
+    }
+
+
     const selectedParty = $('#partySelect option:selected').text();
     $('#partyNameDisplay').text(selectedParty);
 
@@ -87,6 +93,11 @@ function saveInvoice() {
 
     if (!$('#dateInput').val()) {
         alert("Please enter Date before saving.");
+        return;
+    }
+
+    if (!$('#partySelect').val()) {
+        alert("Please enter party name before printing.");
         return;
     }
 
@@ -173,3 +184,4 @@ $(document).ready(function () {
         }
     });
 });
+

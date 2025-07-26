@@ -18,6 +18,18 @@ app.get('/work1', (req,res)=>{
     res.render('work1.ejs', { data });
 });
 
+app.get('/wheat', (req,res) =>{
+    const data = [];
+    res.render('wheat.ejs', { data });
+});
+
+app.get('/bajra', (req,res) =>{
+    const data = [];
+    res.render('bajra.ejs', { data });
+});
+
+
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

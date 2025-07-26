@@ -5,17 +5,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <header>
-    <h1 class="no-print">Roshanlal Kedarnath Mandawar
-        <select id="pageSelector" class="no-print">
-            <option value="/work1">Price</option>
-            <option value="/">Condition</option>
-        </select>
+    <h1 class="no-print">Roshanlal Kedarnath Mandawar (Mustard-Price)
+        <!-- <select id="pageSelector" class="no-print">
+            <option value="/bajra">Bajra</option>
+            <option value="/wheat">Wheat</option>
+        </select> -->
     </h1>
 </header>
 
 
 <div class="main-container">
     <div class="form-container">
+        <select id="pageSelector" class="no-print">
+            <option value="/work1">Mustard-Price</option>
+            <option value="/">Mustard-Condition</option>
+            <option value="/wheat">Wheat</option>
+            <option value="/bajra">Bajra</option>
+        </select>
         <form id="entryForm" class="no-print">
             <input type="number" id="bags" placeholder="Bags" required>
             <input type="number" id="oil" step="0.01" min="0" placeholder="Oil%" required>
@@ -24,19 +30,34 @@
         </form>
         <!-- Keep this OUTSIDE the form -->
         <div class="no-print">
-            Majduri: <input type="number" id="majdur" step="0.01" placeholder="Majduri">
-            <!-- <label>Majduri: <input type="number" id="muddat" step="0.01" placeholder="Muddat"> -->
-            Date: <input type="date" id="dateInput" placeholder="Enter Date" class="work">
-            Partty:
-            <!-- <input type="text" id="partySelect" placeholder="Enter Party Name" class="work"> -->
+            <label for="Majduri">Majduri:</label>
+            <input type="number" id="majdur" step="0.01" placeholder="@250₹">
+
+            <label for="muddatType">Muddat Type:</label>
+            <select id="muddatType">
+                <option value="fixed">₹ Rupees</option>
+                <option value="percent">% Percent</option>
+            </select>
+
+            <input type="number" id="muddat" step="0.01" placeholder="Enter Muddat" />
+
+            <label for="other">Other Charges:</label>
+            <input type="number" id="other" step="0.01" placeholder="@100₹">
+
+            <label for="dateInput">Date:</label>
+            <input type="date" id="dateInput" class="work" placeholder="Enter Date">
+
+            <label for="partySelect">Party:</label>
             <select id="partySelect">
                 <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
                 <option value="2">SHANTI OIL MILLS</option>
                 <option value="3">SANGAM INDUSTRIES</option>
             </select>
+
             <button id="bt" onclick="printTable()">Print</button><br><br>
-            <button id="saveBtn" onclick="saveInvoice()">Save Invoice</button>
-        </div>
+            <button id="saveBtn btt" onclick="saveInvoice()">Save Invoice</button>
+
+        </div><br>
     </div>
 
 
@@ -46,8 +67,10 @@
             <div style="text-align: center; font-family: serif;">
                 <h2><strong>ROSHANLAL KEDARNATH</strong></h2>
                 <p>B-21 NEW MANDI YARD MANDAWAR</p>
-                <p><strong>Party: <span id="partyNameDisplay"></span></strong> | Date: <span id="invoiceDate"></span>
-                </p>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <p><strong>Party: <span id="partyNameDisplay"></span></strong></p>
+                    <p><strong> Date: <span id="invoiceDate"></span></strong></p>   
+                </div>
                 <!-- <span id="invoiceDate"></span></p> -->
             </div>
 
@@ -74,7 +97,7 @@
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>MANDI + DAMI + KKF</strong></td>
+                    <td colspan="6"><strong>MANDI + DAMI + KKF @ 3.75%</strong></td>
                     <td id="mandiAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
@@ -84,8 +107,13 @@
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>MUDDAT @ 0.75%</strong></td>
+                    <td colspan="6"><strong>MUDDAT</strong></td>
                     <td id="muddatAmount">0</td>
+                    <td class="no-print"></td>
+                </tr>
+                <tr>
+                    <td colspan="6"><strong>OTHER CHARGES</strong></td>
+                    <td id="others">0</td>
                     <td class="no-print"></td>
                 </tr>
                 <tr>
@@ -145,7 +173,7 @@
             } else {
                 const rowCount = $('#dataTable tr').filter(function () {
                     return !$(this).attr('id') && $(this).find('td').length > 0;
-                }).length - 5;
+                }).length - 6;
 
                 const newRow = `
                     <tr>
@@ -191,29 +219,29 @@
             $('#partyNameDisplay').text(partyName || ""); // shows blank if empty
         });
 
-        $('#majdur').on('change', function () {
-            updateTotals();
-        });
+        $('#majdur, #muddat, #muddatType, #other').on('input change', updateTotals);
     });
 
     function renumberRows() {
-        let serial = 0;
+        let serial = 0; // Start from 1, change to 0 if you prefer zero-based
 
         $('#dataTable tr').each(function () {
             const $row = $(this);
-            // Skip rows with specific IDs or summary content
-            if (
-                $row.attr('id') === 'totalsRow' ||
-                $row.find('td').eq(0).text().trim().toLowerCase().includes('total') ||
-                $row.find('td').eq(0).text().trim().toLowerCase().includes('mandi') ||
-                $row.find('td').eq(0).text().trim().toLowerCase().includes('majduri') ||
-                $row.find('td').eq(0).text().trim().toLowerCase().includes('muddat') ||
-                $row.find('td').eq(0).text().trim().toLowerCase().includes('gst') ||
-                $row.find('td').eq(0).text().trim().toLowerCase().includes('grand')
-            ) {
-                return;
-            }
+            const firstCellText = $row.find('td').eq(0).text().trim().toLowerCase();
 
+            // Skip totals or summary rows
+            const isSummaryRow = $row.attr('id') === 'totalsRow' ||
+                firstCellText.includes('total') ||
+                firstCellText.includes('mandi') ||
+                firstCellText.includes('majduri') ||
+                firstCellText.includes('muddat') ||
+                firstCellText.includes('gst') ||
+                firstCellText.includes('other') ||
+                firstCellText.includes('grand');
+
+            if (isSummaryRow) return;
+
+            // Update serial number in first cell
             $row.find('td').eq(0).text(serial++);
         });
     }
@@ -227,8 +255,20 @@
         let weightedOilSum = 0;
         let weightedConditionSum = 0;
 
-        $('#dataTable tr').each(function (index) {
-            if (index === 0 || $(this).attr('id') === 'totalsRow') return;
+        $('#dataTable tr').each(function () {
+            const firstCell = $(this).find('td').eq(0).text().trim().toLowerCase();
+
+            const isSummary =
+                $(this).attr('id') === 'totalsRow' ||
+                firstCell.includes('total') ||
+                firstCell.includes('mandi') ||
+                firstCell.includes('majduri') ||
+                firstCell.includes('muddat') ||
+                firstCell.includes('other') ||
+                firstCell.includes('gst') ||
+                firstCell.includes('grand');
+
+            if (isSummary) return;
 
             const cells = $(this).find('td');
             if (cells.length < 7) return;
@@ -250,11 +290,23 @@
 
         const mandiPercent = 3.75;
         const majdur = parseFloat($('#majdur').val()) || 0;
+        const other = parseFloat($('#other').val()) || 0;
+        // const muddat = parseFloat($('#muddat').val()) || 0;
         const mandiAmount = (totalAmount * (mandiPercent / 100));
-        const muddat = (totalAmount) * 0.0075;
-        const Total = totalAmount + mandiAmount + majdur + muddat;
-        const gst = (totalAmount + mandiAmount + majdur + muddat) * 0.05;
-        const grandTotal = totalAmount + mandiAmount + majdur + muddat + gst;
+        const muddatValue = parseFloat($('#muddat').val()) || 0;
+        const muddatType = $('#muddatType').val();
+
+        let muddat = 0;
+        if (muddatType === 'percent') {
+            // Calculate % of base total
+            muddat = (totalAmount + mandiAmount + majdur + other) * (muddatValue / 100);
+        } else {
+            // Fixed value
+            muddat = muddatValue;
+        }
+        const Total = totalAmount + mandiAmount + majdur + muddat + other;
+        const gst = Total * 0.05;
+        const grandTotal = Total + gst;
 
         $('#totalBags').text(totalBags.toFixed(2));
         $('#totalWeight').text(totalWeight.toFixed(2));
@@ -266,6 +318,7 @@
         $('#mandiAmount').text(mandiAmount.toFixed(2));
         $('#majdurAmount').text(majdur.toFixed(2));
         $('#muddatAmount').text(muddat.toFixed(2));
+        $('#others').text(other.toFixed(2));
         $('#Total').text(Total.toFixed(2));
         $('#gstAmount').text(gst.toFixed(2));
         $('#grandTotal').text(grandTotal.toFixed(2));

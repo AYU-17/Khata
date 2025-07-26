@@ -1,36 +1,38 @@
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <header>
-    <h1 class="no-print">Roshanlal Kedarnath Mandawar (Mustard-Condition)</h1>
+    <h1 class="no-print">Roshanlal Kedarnath Mandawar (Wheat)</h1>
 </header>
+
 
 <div class="main-container">
     <div class="form-container">
         <select id="pageSelector" class="no-print">
-            <option value="/">Mustard-Condition</option>
-            <option value="/work1">Mustard-Price</option>
             <option value="/wheat">Wheat</option>
+            <option value="/work1">Mustard-Price</option>
+            <option value="/">Mustard-Condition</option>
             <option value="/bajra">Bajra</option>
         </select>
         <form id="entryForm" class="no-print">
             <input type="number" id="bags" placeholder="Bags" required>
-            <input type="number" id="oil" step="0.01" min="0" placeholder="Oil%" required>
-            <input type="number" id="condition" step="0.01" placeholder="Condition" required>
-            <button type="submit" class="btt">Submit</button>
-        </form>
+            <input type="number" id="price" step="0.01" placeholder="Price" required>
+            <button type="submit">Submit</button>
+        </form><br>
+
 
         <div class="no-print">
             <label for="Majduri">Majduri:</label>
             <input type="number" id="majdur" step="0.01" placeholder="@250₹">
 
             <!-- <label for="muddat">Muddat:</label>
-            <input type="number" id="muddat" step="0.01" placeholder="@0.75%"> -->
+            <input type="number" id="muddat" step="0.01" placeholder="@0.75%">-->
 
             <label for="muddatType">Muddat Type:</label>
             <select id="muddatType">
-                <option value="fixed">₹ Rupees</option>
                 <option value="percent">% Percent</option>
+                <option value="fixed">₹ Rupees</option>
             </select>
 
             <input type="number" id="muddat" step="0.01" placeholder="Enter Muddat" />
@@ -39,13 +41,13 @@
             <input type="number" id="other" step="0.01" placeholder="@100₹">
 
             <label for="dateInput">Date:</label>
-            <input type="date" id="dateInput" class="work" placeholder="Enter Date">
+            <input type="date" id="dateInput" class="work">
 
             <label for="partySelect">Party:</label>
             <select id="partySelect">
-                <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
-                <option value="2">SHANTI OIL MILLS</option>
-                <option value="3">SANGAM INDUSTRIES</option>
+                    <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
+                    <option value="2">SHANTI OIL MILLS</option>
+                    <option value="3">SANGAM INDUSTRIES</option>
             </select>
 
             <button id="bt" onclick="printTable()">Print</button><br><br>
@@ -53,7 +55,6 @@
 
         </div><br>
     </div>
-    <!-- class="save no-print" -->
 
     <div class="table-container">
         <div id="printArea">
@@ -71,9 +72,7 @@
                 <tr>
                     <th>S. No.</th>
                     <th>Bags</th>
-                    <th>Rate</th>
-                    <th>Oil%</th>
-                    <th>Condition</th>
+                    <th>Price</th>
                     <th>Weight</th>
                     <th>Amount</th>
                     <th class="no-print">Action</th>
@@ -82,44 +81,32 @@
                     <td><strong>Total</strong></td>
                     <td id="totalBags">0</td>
                     <td id="weightedRate">0</td>
-                    <td id="weightedOil">0</td>
-                    <td id="weightedCondition">0</td>
                     <td id="totalWeight">0</td>
                     <td id="totalAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>MANDI + DAMI + KKF @3.75%</strong></td>
+                    <td colspan="4"><strong>MANDI + DAMI + KKF @4.35%</strong></td>
                     <td id="mandiAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>MAJDURI</strong></td>
+                    <td colspan="4"><strong>MAJDURI</strong></td>
                     <td id="majdurAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>MUDDAT</strong></td>
+                    <td colspan="4"><strong>MUDDAT</strong></td>
                     <td id="muddatAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>OTHER CHARGES</strong></td>
+                    <td colspan="4"><strong>OTHER CHARGES</strong></td>
                     <td id="others">0</td>
                     <td class="no-print"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"><strong>TOTAL</strong></td>
-                    <td id="Total">0</td>
-                    <td class="no-print"></td>
-                </tr>
-                <tr>
-                    <td colspan="6"><strong>GST @ 5%</strong></td>
-                    <td id="gstAmount">0</td>
-                    <td class="no-print"></td>
-                </tr>
-                <tr>
-                    <td colspan="6"><strong>GRAND TOTAL</strong></td>
+                    <td colspan="4"><strong>GRAND TOTAL</strong></td>
                     <td id="grandTotal">0</td>
                     <td class="no-print"></td>
                 </tr>
@@ -133,11 +120,11 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('dateInput').valueAsDate = new Date();
 
-</script>
+<script>document.getElementById('dateInput').valueAsDate = new Date();</script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     let editRowIndex = null;
 
@@ -146,46 +133,39 @@
             e.preventDefault();
 
             const bags = parseInt($('#bags').val());
-            const oil = parseFloat($('#oil').val());
-            const condition = parseFloat($('#condition').val());
+            const price = parseFloat($('#price').val());
 
-            const rate = ((condition / 42) * oil).toFixed(2);
             const weight = (bags * 0.5).toFixed(2);
-            const amount = (weight * rate).toFixed(2);
+            const amount = (weight * price).toFixed(2);
 
             if (editRowIndex !== null) {
                 const row = $('#dataTable tr').eq(editRowIndex);
                 row.find('td').eq(1).text(bags);
-                row.find('td').eq(2).text(rate);
-                row.find('td').eq(3).text(oil);
-                row.find('td').eq(4).text(condition);
-                row.find('td').eq(5).text(weight);
-                row.find('td').eq(6).text(amount);
+                row.find('td').eq(2).text(price);
+                row.find('td').eq(3).text(weight);
+                row.find('td').eq(4).text(amount);
                 editRowIndex = null;
             } else {
                 const rowCount = $('#dataTable tr').filter(function () {
-                    return !$(this).attr('id') && $(this).find('td').length > 0;
-                }).length - 6;
+                    return $(this).find('td').length > 0 && !$(this).attr('id');
+                }).length - 4;
+
 
                 const newRow = `
                     <tr>
                         <td>${rowCount}</td>
                         <td>${bags}</td>
-                        <td>${rate}</td>
-                        <td>${oil}</td>
-                        <td>${condition}</td>
+                        <td>${price}</td>
                         <td>${weight}</td>
                         <td>${amount}</td>
                         <td class="no-print">
-    <button class="edit-btn">Edit</button>
-    <button class="delete-btn" style="margin-left: 1px; background-color: red; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
+    <button class="edit-btn">Edit</button><button class="delete-btn" style="margin-left: 1px; background-color: red; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
 </td>
 
                     </tr>
                 `;
                 $('#totalsRow').before(newRow);
             }
-
             updateTotals();
             this.reset();
         });
@@ -194,8 +174,7 @@
             const row = $(this).closest('tr');
             editRowIndex = row.index();
             const cells = row.find('td');
-            $('#condition').val(cells.eq(4).text());
-            $('#oil').val(cells.eq(3).text());
+            $('#price').val(cells.eq(2).text());
             $('#bags').val(cells.eq(1).text());
 
         });
@@ -206,33 +185,32 @@
             updateTotals();
         });
 
+        $('#partySelect').on('input', function () {
+            const partyName = $(this).val().trim();
+            $('#partyNameDisplay').text(partyName || ""); // shows blank if empty
+        });
 
-        $('#majdur, #muddat, #muddatType, #other').on('input change', updateTotals);
+
+        $('#majdur, #muddat, #other, #muddatType').on('input change', updateTotals);
     });
 
-    // console.log("Muddat value:", $('#muddat').val());
-
-
     function renumberRows() {
-        let serial = 0; // Start from 1, change to 0 if you prefer zero-based
+        let serial = 0;
 
         $('#dataTable tr').each(function () {
             const $row = $(this);
-            const firstCellText = $row.find('td').eq(0).text().trim().toLowerCase();
+            // Skip rows with specific IDs or summary content
+            if (
+                $row.attr('id') === 'totalsRow' ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('mandi') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('majduri') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('other') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('muddat') ||
+                $row.find('td').eq(0).text().trim().toLowerCase().includes('grand')
+            ) {
+                return;
+            }
 
-            // Skip totals or summary rows
-            const isSummaryRow = $row.attr('id') === 'totalsRow' ||
-                firstCellText.includes('total') ||
-                firstCellText.includes('mandi') ||
-                firstCellText.includes('majduri') ||
-                firstCellText.includes('muddat') ||
-                firstCellText.includes('gst') ||
-                firstCellText.includes('other') ||
-                firstCellText.includes('grand');
-
-            if (isSummaryRow) return;
-
-            // Update serial number in first cell
             $row.find('td').eq(0).text(serial++);
         });
     }
@@ -243,84 +221,65 @@
         let totalWeight = 0;
         let totalAmount = 0;
         let weightedRateSum = 0;
-        let weightedOilSum = 0;
-        let weightedConditionSum = 0;
 
         $('#dataTable tr').each(function () {
-            const firstCell = $(this).find('td').eq(0).text().trim().toLowerCase();
-
-            const isSummary =
-                $(this).attr('id') === 'totalsRow' ||
-                firstCell.includes('total') ||
-                firstCell.includes('mandi') ||
-                firstCell.includes('majduri') ||
-                firstCell.includes('muddat') ||
-                firstCell.includes('other') ||
-                firstCell.includes('gst') ||
-                firstCell.includes('grand');
-
-            if (isSummary) return;
+            // Skip the header row and summary rows
+            const firstCellText = $(this).find('td').first().text().trim();
+            if ($(this).find('th').length > 0 ||  // Skip header row
+                firstCellText === "Total" ||
+                firstCellText.includes("MANDI") ||
+                firstCellText.includes("MAJDURI") ||
+                firstCellText.includes("MUDDAT") ||
+                firstCellText.includes("OTHER") ||
+                firstCellText.includes("GRAND")) {
+                return;
+            }
 
             const cells = $(this).find('td');
-            if (cells.length < 7) return;
+            if (cells.length < 5) return;  // Skip rows that don't have enough cells
 
             const bags = parseFloat(cells.eq(1).text()) || 0;
-            const rate = parseFloat(cells.eq(2).text()) || 0;
-            const oil = parseFloat(cells.eq(3).text()) || 0;
-            const condition = parseFloat(cells.eq(4).text()) || 0;
-            const weight = parseFloat(cells.eq(5).text()) || 0;
-            const amount = parseFloat(cells.eq(6).text()) || 0;
+            const price = parseFloat(cells.eq(2).text()) || 0;
+            const weight = parseFloat(cells.eq(3).text()) || 0;
+            const amount = parseFloat(cells.eq(4).text()) || 0;
 
             totalBags += bags;
             totalWeight += weight;
             totalAmount += amount;
-            weightedRateSum += rate * bags;
-            weightedOilSum += oil * bags;
-            weightedConditionSum += condition * bags;
+            weightedRateSum += (bags * price);
         });
 
-        const mandiPercent = 3.75;
+        const mandiPercent = 4.35;
         const majdur = parseFloat($('#majdur').val()) || 0;
         const other = parseFloat($('#other').val()) || 0;
         // const muddat = parseFloat($('#muddat').val()) || 0;
         const mandiAmount = (totalAmount * (mandiPercent / 100));
-        // const muddat = (totalAmount) * (muddatRate/100);
+
         const muddatValue = parseFloat($('#muddat').val()) || 0;
         const muddatType = $('#muddatType').val();
 
         let muddat = 0;
         if (muddatType === 'percent') {
             // Calculate % of base total
-            muddat = (totalAmount + mandiAmount + majdur + other) * (muddatValue / 100);
+            muddat = (totalAmount) * (muddatValue / 100);
         } else {
             // Fixed value
             muddat = muddatValue;
         }
+        
+        const grandTotal = totalAmount + mandiAmount + majdur + muddat + other;
 
-        const Total = totalAmount + mandiAmount + majdur + muddat + other;
-        const gst = (Total) * 0.05;
-        const grandTotal = Total + gst;
-
-        $('#totalBags').text(totalBags.toFixed(2));
+        $('#totalBags').text(totalBags);
         $('#totalWeight').text(totalWeight.toFixed(2));
         $('#totalAmount').text(totalAmount.toFixed(2));
-
-        $('#weightedRate').text(totalBags ? (weightedRateSum / totalBags).toFixed(2) : "0.00");
-        $('#weightedOil').text(totalBags ? (weightedOilSum / totalBags).toFixed(2) : "0.00");
-        $('#weightedCondition').text(totalBags ? (weightedConditionSum / totalBags).toFixed(2) : "0.00");
+        $('#weightedRate').text((weightedRateSum / totalBags).toFixed(2));
 
         $('#mandiAmount').text(mandiAmount.toFixed(2));
         $('#majdurAmount').text(majdur.toFixed(2));
         $('#muddatAmount').text(muddat.toFixed(2));
         $('#others').text(other.toFixed(2));
-        $('#Total').text(Total.toFixed(2));
-        $('#gstAmount').text(gst.toFixed(2));
         $('#grandTotal').text(grandTotal.toFixed(2));
-
-        // Update the readonly mandi field
-        $('#mandi').val(mandiAmount.toFixed(2));
     }
 
 </script>
-
-<script src="id.js"></script>
+<script src="/id.js"></script>
