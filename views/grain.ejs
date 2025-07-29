@@ -3,17 +3,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <header>
-    <h1 class="no-print">Roshanlal Kedarnath Mandawar (Wheat)</h1>
+    <h1 class="no-print" id="pageHeading">Roshanlal Kedarnath Mandawar</h1>
 </header>
-
 
 <div class="main-container">
     <div class="form-container">
         <select id="pageSelector" class="no-print">
-            <option value="/wheat">Wheat</option>
-            <option value="/work1">Mustard-Price</option>
+            <option value="/grain">Grain</option>
             <option value="/">Mustard-Condition</option>
-            <option value="/bajra">Bajra</option>
+            <option value="/work1">Mustard-Price</option>
+        </select>
+
+        <select id="grainType" class="no-print">
+            <option value="wheat">Wheat</option>
+            <option value="bajra">Bajra</option>
         </select>
         <form id="entryForm" class="no-print">
             <input type="number" id="bags" placeholder="Bags" required>
@@ -21,13 +24,9 @@
             <button type="submit">Submit</button>
         </form><br>
 
-
         <div class="no-print">
             <label for="Majduri">Majduri:</label>
             <input type="number" id="majdur" step="0.01" placeholder="@250₹">
-
-            <!-- <label for="muddat">Muddat:</label>
-            <input type="number" id="muddat" step="0.01" placeholder="@0.75%">-->
 
             <label for="muddatType">Muddat Type:</label>
             <select id="muddatType">
@@ -35,7 +34,7 @@
                 <option value="fixed">₹ Rupees</option>
             </select>
 
-            <input type="number" id="muddat" step="0.01" placeholder="Enter Muddat" />
+            <input type="number" id="muddat" step="0.01" placeholder="Enter Muddat">
 
             <label for="other">Other Charges:</label>
             <input type="number" id="other" step="0.01" placeholder="@100₹">
@@ -45,14 +44,14 @@
 
             <label for="partySelect">Party:</label>
             <select id="partySelect">
-                    <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
-                    <option value="2">SHANTI OIL MILLS</option>
-                    <option value="3">SANGAM INDUSTRIES</option>
+                <option value="0"> </option>
+                <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
+                <option value="2">SHANTI OIL MILLS</option>
+                <option value="3">SANGAM INDUSTRIES</option>
             </select>
 
             <button id="bt" onclick="printTable()">Print</button><br><br>
             <button id="saveBtn btt" onclick="saveInvoice()">Save Invoice</button>
-
         </div><br>
     </div>
 
@@ -63,30 +62,30 @@
                 <p>B-21 NEW MANDI YARD MANDAWAR</p>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <p><strong>Party: <span id="partyNameDisplay"></span></strong></p>
-                    <p><strong> Date: <span id="invoiceDate"></span></strong></p>   
+                    <p><strong> Date: <span id="invoiceDate"></span></strong></p>
                 </div>
             </div>
 
             <table border="1" id="dataTable">
-                <!-- same table rows as you have now -->
                 <tr>
                     <th>S. No.</th>
                     <th>Bags</th>
-                    <th>Price</th>
+                    <th>Rate</th>
                     <th>Weight</th>
                     <th>Amount</th>
                     <th class="no-print">Action</th>
                 </tr>
                 <tr id="totalsRow">
                     <td><strong>Total</strong></td>
-                    <td id="totalBags">0</td>
-                    <td id="weightedRate">0</td>
-                    <td id="totalWeight">0</td>
-                    <td id="totalAmount">0</td>
+                    <td id="totalBags"><strong>0</strong></td>
+                    <td id="weightedRate"><strong>0</strong></td>
+                    <td id="totalWeight"><strong>0</strong></td>
+                    <td id="totalAmount"><strong>0</strong></td>
                     <td class="no-print"></td>
                 </tr>
-                <tr>
-                    <td colspan="4"><strong>MANDI + DAMI + KKF @4.35%</strong></td>
+                <tr id="mandiRow">
+                    <td colspan="4"><strong>MANDI + DAMI + KKF @<span id="mandiPercentDisplay">4.35</span>%</strong>
+                    </td>
                     <td id="mandiAmount">0</td>
                     <td class="no-print"></td>
                 </tr>
@@ -120,8 +119,42 @@
     </div>
 </div>
 
+<script>
+    document.getElementById('dateInput').valueAsDate = new Date();
 
-<script>document.getElementById('dateInput').valueAsDate = new Date();</script>
+    // Set initial values based on default grain type
+    let currentGrainType = 'wheat';
+    let mandiPercent = 4.35;
+    document.getElementById('pageHeading').textContent += ' (Wheat)';
+
+    // Grain type change handler
+    document.getElementById('grainType').addEventListener('change', function () {
+        currentGrainType = this.value;
+
+        if (currentGrainType === 'wheat') {
+            mandiPercent = 4.35;
+            document.getElementById('pageHeading').textContent = 'Roshanlal Kedarnath Mandawar (Wheat)';
+            document.getElementById('mandiPercentDisplay').textContent = '4.35';
+        } else {
+            mandiPercent = 3.25;
+            document.getElementById('pageHeading').textContent = 'Roshanlal Kedarnath Mandawar (Bajra)';
+            document.getElementById('mandiPercentDisplay').textContent = '3.25';
+        }
+
+        // Update totals with new mandi percent
+        updateTotals();
+    });
+</script>
+
+<script>
+    document.getElementById('pageSelector').addEventListener('change', function () {
+        const selectedPage = this.value;
+        if (selectedPage) {
+            window.location.href = selectedPage;
+        }
+    });
+</script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -150,7 +183,6 @@
                     return $(this).find('td').length > 0 && !$(this).attr('id');
                 }).length - 4;
 
-
                 const newRow = `
                     <tr>
                         <td>${rowCount}</td>
@@ -159,9 +191,9 @@
                         <td>${weight}</td>
                         <td>${amount}</td>
                         <td class="no-print">
-    <button class="edit-btn">Edit</button><button class="delete-btn" style="margin-left: 1px; background-color: red; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
-</td>
-
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn" style="margin-left: 1px; background-color: red; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
+                        </td>
                     </tr>
                 `;
                 $('#totalsRow').before(newRow);
@@ -176,7 +208,6 @@
             const cells = row.find('td');
             $('#price').val(cells.eq(2).text());
             $('#bags').val(cells.eq(1).text());
-
         });
 
         $('#dataTable').on('click', '.delete-btn', function () {
@@ -186,12 +217,12 @@
         });
 
         $('#partySelect').on('input', function () {
-            const partyName = $(this).val().trim();
-            $('#partyNameDisplay').text(partyName || ""); // shows blank if empty
+            const partyName = $(this).find('option:selected').text().trim();
+            $('#partyNameDisplay').text(partyName || "");
         });
 
 
-        $('#majdur, #muddat, #other, #muddatType').on('input change', updateTotals);
+        $('#majdur, #muddat, #muddatType, #other').on('input change', updateTotals);
     });
 
     function renumberRows() {
@@ -199,7 +230,6 @@
 
         $('#dataTable tr').each(function () {
             const $row = $(this);
-            // Skip rows with specific IDs or summary content
             if (
                 $row.attr('id') === 'totalsRow' ||
                 $row.find('td').eq(0).text().trim().toLowerCase().includes('mandi') ||
@@ -215,7 +245,6 @@
         });
     }
 
-
     function updateTotals() {
         let totalBags = 0;
         let totalWeight = 0;
@@ -223,9 +252,8 @@
         let weightedRateSum = 0;
 
         $('#dataTable tr').each(function () {
-            // Skip the header row and summary rows
             const firstCellText = $(this).find('td').first().text().trim();
-            if ($(this).find('th').length > 0 ||  // Skip header row
+            if ($(this).find('th').length > 0 ||
                 firstCellText === "Total" ||
                 firstCellText.includes("MANDI") ||
                 firstCellText.includes("MAJDURI") ||
@@ -236,7 +264,7 @@
             }
 
             const cells = $(this).find('td');
-            if (cells.length < 5) return;  // Skip rows that don't have enough cells
+            if (cells.length < 5) return;
 
             const bags = parseFloat(cells.eq(1).text()) || 0;
             const price = parseFloat(cells.eq(2).text()) || 0;
@@ -249,10 +277,8 @@
             weightedRateSum += (bags * price);
         });
 
-        const mandiPercent = 4.35;
         const majdur = parseFloat($('#majdur').val()) || 0;
         const other = parseFloat($('#other').val()) || 0;
-        // const muddat = parseFloat($('#muddat').val()) || 0;
         const mandiAmount = (totalAmount * (mandiPercent / 100));
 
         const muddatValue = parseFloat($('#muddat').val()) || 0;
@@ -260,13 +286,17 @@
 
         let muddat = 0;
         if (muddatType === 'percent') {
-            // Calculate % of base total
-            muddat = (totalAmount) * (muddatValue / 100);
+            // For Bajra: Calculate % of base total + mandi + majduri + other
+            // For Wheat: Calculate % of base total only
+            // const baseAmount = currentGrainType === 'bajra' ?
+            //     (totalAmount + mandiAmount + majdur + other) :
+            //     totalAmount;
+            muddat = totalAmount * (muddatValue / 100);
         } else {
             // Fixed value
             muddat = muddatValue;
         }
-        
+
         const grandTotal = totalAmount + mandiAmount + majdur + muddat + other;
 
         $('#totalBags').text(totalBags);
@@ -280,6 +310,5 @@
         $('#others').text(other.toFixed(2));
         $('#grandTotal').text(grandTotal.toFixed(2));
     }
-
 </script>
 <script src="/id.js"></script>

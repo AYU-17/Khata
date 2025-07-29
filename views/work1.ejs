@@ -19,8 +19,9 @@
         <select id="pageSelector" class="no-print">
             <option value="/work1">Mustard-Price</option>
             <option value="/">Mustard-Condition</option>
-            <option value="/wheat">Wheat</option>
-            <option value="/bajra">Bajra</option>
+            <!-- <option value="/wheat">Wheat</option>
+            <option value="/bajra">Bajra</option> -->
+            <option value="/grain">Grain</option>
         </select>
         <form id="entryForm" class="no-print">
             <input type="number" id="bags" placeholder="Bags" required>
@@ -35,8 +36,8 @@
 
             <label for="muddatType">Muddat Type:</label>
             <select id="muddatType">
-                <option value="fixed">₹ Rupees</option>
                 <option value="percent">% Percent</option>
+                <option value="fixed">₹ Rupees</option>
             </select>
 
             <input type="number" id="muddat" step="0.01" placeholder="Enter Muddat" />
@@ -52,6 +53,7 @@
                 <option value="1"> C P AGRO INDUSTRIES ROOPBAS</option>
                 <option value="2">SHANTI OIL MILLS</option>
                 <option value="3">SANGAM INDUSTRIES</option>
+                <option value="4">                              </option>
             </select>
 
             <button id="bt" onclick="printTable()">Print</button><br><br>
@@ -118,8 +120,8 @@
                 </tr>
                 <tr>
                     <td colspan="6"><strong>TOTAL</strong></td>
-                    <td id="Total">0</td>
-                    <td class="no-print"></td>
+                    <td id="Total"><strong>0</strong></td>
+                    <td class="no-print"><strong></strong></td>
                 </tr>
                 <tr>
                     <td colspan="6"><strong>GST @ 5%</strong></td>
@@ -128,8 +130,8 @@
                 </tr>
                 <tr>
                     <td colspan="6"><strong>GRAND TOTAL</strong></td>
-                    <td id="grandTotal">0</td>
-                    <td class="no-print"></td>
+                    <td id="grandTotal"><strong>0</strong></td>
+                    <td class="no-print"><strong></strong></td>
                 </tr>
             </table>
             <div style="text-align: right; margin-top: 60px;">
@@ -299,7 +301,7 @@
         let muddat = 0;
         if (muddatType === 'percent') {
             // Calculate % of base total
-            muddat = (totalAmount + mandiAmount + majdur + other) * (muddatValue / 100);
+            muddat = (totalAmount) * (muddatValue / 100);
         } else {
             // Fixed value
             muddat = muddatValue;
