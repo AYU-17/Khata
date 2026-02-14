@@ -10,8 +10,7 @@
     <div class="form-container">
         <select id="pageSelector" class="no-print">
             <option value="/grain">Grain</option>
-            <option value="/">Mustard-Condition</option>
-            <option value="/work1">Mustard-Price</option>
+            <option value="/">Oil</option>
         </select>
 
         <select id="grainType" class="no-print">
@@ -122,12 +121,10 @@
 <script>
     document.getElementById('dateInput').valueAsDate = new Date();
 
-    // Set initial values based on default grain type
     let currentGrainType = 'wheat';
     let mandiPercent = 4.35;
     document.getElementById('pageHeading').textContent += ' (Wheat)';
 
-    // Grain type change handler
     document.getElementById('grainType').addEventListener('change', function () {
         currentGrainType = this.value;
 
@@ -141,7 +138,7 @@
             document.getElementById('mandiPercentDisplay').textContent = '3.25';
         }
 
-        // Update totals with new mandi percent
+        clearDataRows();
         updateTotals();
     });
 </script>
@@ -286,14 +283,8 @@
 
         let muddat = 0;
         if (muddatType === 'percent') {
-            // For Bajra: Calculate % of base total + mandi + majduri + other
-            // For Wheat: Calculate % of base total only
-            // const baseAmount = currentGrainType === 'bajra' ?
-            //     (totalAmount + mandiAmount + majdur + other) :
-            //     totalAmount;
             muddat = totalAmount * (muddatValue / 100);
         } else {
-            // Fixed value
             muddat = muddatValue;
         }
 
@@ -302,13 +293,35 @@
         $('#totalBags').text(totalBags);
         $('#totalWeight').text(totalWeight.toFixed(2));
         $('#totalAmount').text(totalAmount.toFixed(2));
-        $('#weightedRate').text((weightedRateSum / totalBags).toFixed(2));
+        $('#weightedRate').text(totalBags > 0 ? (weightedRateSum / totalBags).toFixed(2) : "0.00");
 
         $('#mandiAmount').text(mandiAmount.toFixed(2));
         $('#majdurAmount').text(majdur.toFixed(2));
         $('#muddatAmount').text(muddat.toFixed(2));
         $('#others').text(other.toFixed(2));
         $('#grandTotal').text(grandTotal.toFixed(2));
+    }
+
+    function clearDataRows() {
+        $('#dataTable tr').each(function () {
+            const $row = $(this);
+            if ($row.find('td').length === 0) return;
+
+            const firstCellText = $row.find('td').eq(0).text().trim().toLowerCase();
+            const isSummaryRow = $row.attr('id') === 'totalsRow' ||
+                firstCellText.includes('total') ||
+                firstCellText.includes('mandi') ||
+                firstCellText.includes('majduri') ||
+                firstCellText.includes('muddat') ||
+                firstCellText.includes('gst') ||
+                firstCellText.includes('other') ||
+                firstCellText.includes('grand');
+
+            if (!isSummaryRow) {
+                $row.remove();
+            }
+        });
+        updateTotals();
     }
 </script>
 <script src="/id.js"></script>

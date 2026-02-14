@@ -28,8 +28,15 @@ function printTable() {
     // Force update all totals before printing
     updateTotals();
 
+    // Clone the printArea to avoid affecting the original
+    const printArea = document.getElementById('printArea').cloneNode(true);
+
+    // Remove any remaining "no-print" elements
+    const noPrintElements = printArea.querySelectorAll('.no-print');
+    noPrintElements.forEach(el => el.remove());
+
     // Get the print area HTML
-    const printContent = document.getElementById('printArea').innerHTML;
+    const printContent = printArea.innerHTML;
 
     // Create a new window for printing
     const printWindow = window.open('', '_blank');
@@ -61,9 +68,6 @@ function printTable() {
     h2 {
         font-size: 16px;
     }
-    .no-print { display: none; }
-    .work {display: none;}
-    td:last-child, th:last-child { display: none; }
 </style>
 
             </head>
